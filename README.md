@@ -15,7 +15,9 @@ There is a prerequisite that `git` be installed as well as a version of `maven` 
 The master branch also requires Java 8. If you already run Java 8 then there is nothing to do. However, if you are using an older JVM for any reason you can execute the script exporting `JAVA_HOME` variable pointing to a Java 8 JDK install.
 
 e.g. for Debian
-`export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64; ./build-equinox.sh R4_5_maintenance`
+```
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64; ./build-equinox.sh R4_5_maintenance
+```
 
 This should satisfy the build.
 
