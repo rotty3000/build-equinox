@@ -16,6 +16,7 @@
 #
 
 BRANCH=${1:-master}
+LOG=/tmp/build-equinox.log
 
 checkoutSubmodule() {
 	(
@@ -47,7 +48,7 @@ install() {
 	(
 		echo "[----> Installing '${1##*/}']"
 		cd "$1"
-		mvn -N install > /dev/null 2>&1
+		mvn -N install > /dev/null 2> $LOG
 	)&
 	spin $!
 }
@@ -68,7 +69,17 @@ spin() {
 		i=$(( $i == 3 ? 0 : $i + 1 ))
 		sleep .1
 	done
+	if [ -e $LOG ] && [ -s $LOG ]; then
+		echo "[      Errors]"
+		cat $LOG
+		rm $LOG
+		exit 1;
+	fi
 }
+
+if [ -e $LOG ]; then
+	rm $LOG
+fi
 
 START=$(date +%s.%N)
 
