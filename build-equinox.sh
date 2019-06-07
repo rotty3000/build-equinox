@@ -83,6 +83,8 @@ fi
 
 START=$(date +%s.%N)
 
+cd ../
+
 # (optional) Save this in your .profile or .bashrc for reuse, speeds up the build
 export MAVEN_OPTS="-Xmx2048m -Declipse.p2.mirrors=false"
 
