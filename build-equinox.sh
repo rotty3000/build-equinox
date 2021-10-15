@@ -90,7 +90,7 @@ cd ../
 # (optional) Save this in your .profile or .bashrc for reuse, speeds up the build
 export MAVEN_OPTS="-Xmx2048m -Declipse.p2.mirrors=false"
 
-clone_and_init "git://git.eclipse.org/gitroot/platform/eclipse.platform.releng.aggregator.git"
+clone_and_init "https://git.eclipse.org/r/platform/eclipse.platform.releng.aggregator.git"
 
 checkoutSubmodule "eclipse.platform.runtime"
 checkoutSubmodule "rt.equinox.framework"
