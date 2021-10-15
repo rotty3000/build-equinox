@@ -42,6 +42,8 @@ clone_and_init() {
 		git submodule init 2>/dev/null
 	)&
 	spin $!
+
+	cd "${repo_dir}"
 }
 
 install() {
@@ -57,7 +59,7 @@ integrationTest() {
 	(
 		echo "[----> Integration Testing '${1##*/}']"
 		cd "$1"
-		mvn integration-test -DskipTests=false
+		mvn verify
 	)
 }
 
@@ -73,7 +75,7 @@ spin() {
 		echo "[      Errors]"
 		cat $LOG
 		rm $LOG
-		exit 1;
+		#exit 1;
 	fi
 }
 
@@ -89,8 +91,6 @@ cd ../
 export MAVEN_OPTS="-Xmx2048m -Declipse.p2.mirrors=false"
 
 clone_and_init "git://git.eclipse.org/gitroot/platform/eclipse.platform.releng.aggregator.git"
-
-cd "${repo_dir}"
 
 checkoutSubmodule "eclipse.platform.runtime"
 checkoutSubmodule "rt.equinox.framework"
