@@ -21,11 +21,11 @@ LOG=/tmp/build-equinox.log
 checkoutSubmodule() {
 	(
 		local name=${1##*/}
-		echo "[----> Initing Submodule '${name}']"
-		git submodule update "${name}" 2>/dev/null
+		echo "[----> Initing Submodule '${name}']" | tee $LOG
+		git submodule update "${name}" >>$LOG 2>&1
 		cd "${name}"
-		git fetch origin ${BRANCH}:${BRANCH} 2>/dev/null
-		git checkout ${BRANCH} 2>/dev/null
+		git fetch origin ${BRANCH}:${BRANCH} >>$LOG 2>&1
+		git checkout ${BRANCH} >>$LOG 2>&1
 	)&
 	spin $!
 }
@@ -34,12 +34,12 @@ clone_and_init() {
 	repo_dir=${1##*/}
 	repo_dir=${repo_dir%.git}
 	(
-		echo "[----> Cloning '${repo_dir}']"
-		git clone -b master --progress "$1" 2>/dev/null
+		echo "[----> Cloning '${repo_dir}']" | tee $LOG
+		git clone -b master --depth=1 --progress "$1" ${repo_dir} >>$LOG 2>&1
 		cd ${repo_dir}
-		git fetch origin ${BRANCH}:${BRANCH} 2>/dev/null
-		git checkout ${BRANCH} 2>/dev/null
-		git submodule init 2>/dev/null
+		git fetch origin ${BRANCH}:${BRANCH} >>$LOG 2>&1
+		git checkout ${BRANCH} >>$LOG 2>&1
+		git submodule init >>$LOG 2>&1
 	)&
 	spin $!
 
@@ -48,18 +48,18 @@ clone_and_init() {
 
 install() {
 	(
-		echo "[----> Installing '${1##*/}']"
+		echo "[----> Installing '${1##*/}']" | tee $LOG
 		cd "$1"
-		mvn -N install > /dev/null 2> $LOG
+		mvn -N install >>$LOG 2>&1
 	)&
 	spin $!
 }
 
 integrationTest() {
 	(
-		echo "[----> Integration Testing '${1##*/}']"
+		echo "[----> Integration Testing '${1##*/}']" | tee $LOG
 		cd "$1"
-		mvn verify
+		mvn verify 2>&1 | tee $LOG
 	)
 }
 
@@ -71,12 +71,12 @@ spin() {
 		i=$(( $i == 3 ? 0 : $i + 1 ))
 		sleep .1
 	done
-	if [ -e $LOG ] && [ -s $LOG ]; then
-		echo "[      Errors]"
-		cat $LOG
-		rm $LOG
-		#exit 1;
-	fi
+	# if [ -e $LOG ] && [ -s $LOG ]; then
+	# 	echo "[      Errors]"
+	# 	cat $LOG
+	# 	rm $LOG
+	# 	#exit 1;
+	# fi
 }
 
 if [ -e $LOG ]; then
@@ -119,7 +119,7 @@ install "eclipse.platform.runtime/bundles/org.eclipse.core.jobs"
 install "eclipse.platform.runtime/bundles/org.eclipse.core.contenttype"
 install "eclipse.platform.runtime/bundles/org.eclipse.core.runtime"
 
-#integrationTest "rt.equinox.bundles/bundles/org.eclipse.equinox.http.servlet.tests"
+integrationTest "rt.equinox.bundles/bundles/org.eclipse.equinox.http.servlet.tests"
 
 END=$(date +%s.%N)
 DIFF=$(bc -l <<< "scale=3; ($END - $START)")
