@@ -71,12 +71,6 @@ spin() {
 		i=$(( $i == 3 ? 0 : $i + 1 ))
 		sleep .1
 	done
-	# if [ -e $LOG ] && [ -s $LOG ]; then
-	# 	echo "[      Errors]"
-	# 	cat $LOG
-	# 	rm $LOG
-	# 	#exit 1;
-	# fi
 }
 
 if [ -e $LOG ]; then
@@ -119,7 +113,7 @@ install "eclipse.platform.runtime/bundles/org.eclipse.core.jobs"
 install "eclipse.platform.runtime/bundles/org.eclipse.core.contenttype"
 install "eclipse.platform.runtime/bundles/org.eclipse.core.runtime"
 
-integrationTest "rt.equinox.bundles/bundles/org.eclipse.equinox.http.servlet.tests"
+#integrationTest "rt.equinox.bundles/bundles/org.eclipse.equinox.http.servlet.tests"
 
 END=$(date +%s.%N)
 DIFF=$(bc -l <<< "scale=3; ($END - $START)")
