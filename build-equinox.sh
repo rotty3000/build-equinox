@@ -101,6 +101,7 @@ install "eclipse.platform.releng.prereqs.sdk"
 
 install "rt.equinox.framework"
 install "rt.equinox.framework/bundles/org.eclipse.osgi"
+install "rt.equinox.framework/bundles/org.eclipse.osgi.util"
 install "rt.equinox.framework/bundles/org.eclipse.osgi.services"
 install "rt.equinox.framework/bundles/org.eclipse.equinox.launcher"
 
